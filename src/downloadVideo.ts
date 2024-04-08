@@ -69,8 +69,12 @@ async function extractVideoUrl(playerData: string) {
   videoData.title = decodeURIComponent(videoData.title);
 
   const qualities = Object.values(videoData.qualities);
-  const ql = qualities[1]; // low quality
-  //const ql = qualities[qualities.length - 1]; // high quality
+  let ql;
+  if (Bun.env.QUALITY == "low") {
+    ql = qualities[1]; // low quality
+  } else if (Bun.env.QUALITY == "high") {
+    ql = qualities[qualities.length - 1]; // high quality
+  }
 
   const CdaApiParams = await JSON.stringify({
     jsonrpc: "2.0",
