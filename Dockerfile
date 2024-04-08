@@ -1,4 +1,4 @@
-FROM --platform=linux/arm64 oven/bun:latest
+FROM oven/bun:latest
 
 COPY package.json ./
 COPY bun.lockb ./
