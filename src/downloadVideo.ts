@@ -107,6 +107,7 @@ async function downloadVideo(videoURL: string, path: string, fileName: string) {
 }
 
 let errorCount = 0; // Error counter
+const MaxErrorCount = Number(Bun.env.MAX_ERROR_COUNT) ?? 5;
 // Downloader
 export async function downloadAnimeNiEpisode(AnimeNiUrl: string) {
   try {
@@ -116,13 +117,13 @@ export async function downloadAnimeNiEpisode(AnimeNiUrl: string) {
     const videoURL = await extractVideoUrl(playerData);
     await downloadVideo(videoURL, series, title);
   } catch (err) {
+    if (errorCount >= MaxErrorCount) {
+      throw new Error("Full download Error: ", { cause: err });
+    }
+
     errorCount++;
     console.error("Download Error: ", { cause: err });
     console.error("Error Count: ", errorCount);
-
-    if (errorCount >= 10) {
-      throw new Error("Full download Error: ", { cause: err });
-    }
     await downloadAnimeNiEpisode(AnimeNiUrl);
   }
 
