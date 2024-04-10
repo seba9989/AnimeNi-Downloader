@@ -105,13 +105,25 @@ async function downloadVideo(videoURL: string, path: string, fileName: string) {
   }
 }
 
+let errorCount = 0; // Error counter
 // Downloader
 export async function downloadAnimeNiEpisode(AnimeNiUrl: string) {
-  console.log(AnimeNiUrl);
-  const { CdaUrl, series, title } = await scrapAnimeNi(AnimeNiUrl);
-  const playerData = await scrapCda(CdaUrl);
-  const videoURL = await extractVideoUrl(playerData);
-  await downloadVideo(videoURL, series, title);
+  try {
+    console.log(AnimeNiUrl);
+    const { CdaUrl, series, title } = await scrapAnimeNi(AnimeNiUrl);
+    const playerData = await scrapCda(CdaUrl);
+    const videoURL = await extractVideoUrl(playerData);
+    await downloadVideo(videoURL, series, title);
+  } catch (err) {
+    errorCount++;
+    console.error("Download Error: ", { cause: err });
+    console.error("Error Count: ", errorCount);
+
+    if (errorCount >= 10) {
+      throw new Error("Full download Error: ", { cause: err });
+    }
+    await downloadAnimeNiEpisode(AnimeNiUrl);
+  }
 }
 
 export async function downloadAnimeNiSeries(
