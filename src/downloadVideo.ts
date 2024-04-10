@@ -125,6 +125,8 @@ export async function downloadAnimeNiEpisode(AnimeNiUrl: string) {
     }
     await downloadAnimeNiEpisode(AnimeNiUrl);
   }
+
+  errorCount = 0;
 }
 
 export async function downloadAnimeNiSeries(
