@@ -94,6 +94,7 @@ async function extractVideoUrl(playerData: string) {
 }
 
 async function downloadVideo(videoURL: string, path: string, fileName: string) {
+  console.log("Downloading: ", fileName, "URL: ", videoURL);
   const startPath = Bun.env.START_PATH ?? ".";
   const file = await fetch(videoURL);
   const fullPath = `${startPath}/${path}/${fileName}.mp4`;
