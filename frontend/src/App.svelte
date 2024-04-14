@@ -34,7 +34,9 @@
   let messages: Message[] = [];
   let socket: WebSocket;
   const connectWs = () => {
-    socket = new WebSocket("ws://localhost:3000");
+    socket = new WebSocket(
+      import.meta.env.VITE_WEB_SOCKET_URL ?? "ws://localhost:3000",
+    );
 
     socket.addEventListener("message", (e) => {
       console.log(e.data);

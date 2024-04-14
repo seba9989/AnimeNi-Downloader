@@ -12,7 +12,6 @@ let server = Bun.serve({
     }
   },
   websocket: {
-    
     message: async function (ws, message: string) {
       const send = (message: Message) => {
         if (typeof message === "string") {
@@ -31,34 +30,28 @@ let server = Bun.serve({
           }
 
           ws.send(toSend);
+          console.log(toSend);
         }
       };
 
       const messageData: FormData = JSON.parse(message);
-      console.log("message: ", messageData);
 
-      // const { cdaUrl, series, title } = await animeNiEpisodeScraper(
-      //   messageData.url,
-      // );
-      // const cdaData = await cdaScraper(cdaUrl);
-      if (messageData.type === "one") {
-        await downloadOne(messageData.url, send);
+      switch (messageData.type) {
+        case "one":
+          await downloadOne(messageData.url, send);
+          break;
+        case "many":
+          await downloadMany(
+            messageData.url,
+            messageData.firstEpisode,
+            messageData.lastEpisode,
+            send,
+          );
+          break;
+        case "full":
+          await downloadFull(messageData.url, send);
+          break;
       }
-
-      if (messageData.type === "many") {
-        await downloadMany(
-          messageData.url,
-          messageData.firstEpisode,
-          messageData.lastEpisode,
-          send,
-        );
-      }
-
-      if (messageData.type === "full") {
-        await downloadFull(messageData.url, send);
-      }
-
-      //   ws.close();
     },
   },
 });
