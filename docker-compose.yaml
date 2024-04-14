@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  anime_ni-downloader-frontend:
+    container_name: frontend
+    image: seba9989/anime_ni-downloader-frontend
+    environment:
+      - QUALITY=min # low or high
+    build: 
+      context: ./frontend
+  # anime_ni-downloader-backend:
+  #   container_name: frontend
+    # volumes:
+    #   - anime_ni-downloader:/download
+
+
+# volumes:
+#   anime_ni-downloader:
